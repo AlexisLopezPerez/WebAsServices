@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Primera API REST</title>
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #resultado {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Consumir API REST</h2>
+        <button id="btnLlamar">Saludar a la API</button>
+        <p id="resultado">Esperando click...</p>
+    </div>
+
+    <script>
+        document.getElementById('btnLlamar').addEventListener('click', () => {
+            const txtResultado = document.getElementById('resultado');
+            txtResultado.textContent = "Cargando...";
+
+            // Hacemos la petición de forma asíncrona a nuestro archivo PHP
+            fetch('api.php')
+                .then(response => {
+                    // Verificar si la respuesta del servidor es correcta (código 200)
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                    return response.json(); // Convertir el JSON recibido a objeto JS
+                })
+                .then(data => {
+                    // Accedemos a la propiedad "message" que definimos en PHP
+                    txtResultado.textContent = data.message;
+                    txtResultado.style.color = "#28a745"; // Cambiar a color verde
+                })
+                .catch(error => {
+                    // Capturar errores en caso de que el servidor falle o no encuentre el archivo
+                    txtResultado.textContent = "Hubo un error al conectar con la API.";
+                    txtResultado.style.color = "#dc3545"; // Cambiar a color rojo
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+</body>
+</html>
