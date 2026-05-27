@@ -12,7 +12,7 @@ async function cargarDatos() {
 
         // Iterar y filtrar solo los que están "Alive"
         datos.results.forEach(personaje => {
-            if (personaje.status === 'Dead') {
+  
                 const tarjeta = document.createElement('div');
                 tarjeta.className = 'tarjeta';
                 tarjeta.innerHTML = `
@@ -21,7 +21,6 @@ async function cargarDatos() {
                     <p>Especie: ${personaje.species}</p>
                 `;
                 contenedor.appendChild(tarjeta);
-            }
         });
     } catch (error) {
         console.error("Error en la petición:", error);
