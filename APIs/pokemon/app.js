@@ -5,26 +5,24 @@ async function cargarDatos() {
     contenedor.innerHTML = 'Cargando...';
 
     try {
-        const respuesta = await fetch('https://pokeapi.co/api/v2/pokemon/');
-        const datos = await respuesta.json();
+        let respuesta = await fetch("https://pokeapi.co/api/v2/pokemon/"); 
+                    
+        let datos = await respuesta.json();
         
         contenedor.innerHTML = ''; // Limpiar el "Cargando..."
+        
+        for (const pokemon of datos.results) {            
+            const resDetalle = await fetch(pokemon.url);
+            const datosPokemon = await resDetalle.json();
 
-        // Iterar y filtrar solo los que están "Alive"
-        datos.results.forEach(personaje => {                
-                const tarjeta = document.createElement('div');
+            const tarjeta = document.createElement('div');
                 tarjeta.className = 'tarjeta';
-                /*tarjeta.innerHTML = `
-                    <img src="${personaje.image}" alt="${personaje.name}">
-                    <h3>${personaje.name}</h3>
-                    <p>Especie: ${personaje.species}</p>
-                `;*/
-                tarjeta.innerHTML = `                                      
-                    <h3>${personaje.name}</h3>
-                `;
+                tarjeta.innerHTML = `
+                    <img src="${datosPokemon.sprites.front_default}" alt="${datosPokemon.name}">
+                    <h3>${datosPokemon.name}</h3>                    
+                `;                
                 contenedor.appendChild(tarjeta);
-            
-        });
+        }
     } catch (error) {
         console.error("Error en la petición:", error);
         contenedor.innerHTML = 'Hubo un error al cargar los datos.';
