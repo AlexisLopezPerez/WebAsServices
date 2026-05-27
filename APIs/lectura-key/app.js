@@ -21,7 +21,11 @@ document.getElementById('btnBuscar').addEventListener('click', async () => {
         }
 
         const temperatura = datos.main.temp;
-        resultadoDiv.innerText = `La temperatura en ${datos.name} es de ${temperatura}°C.`;
+        const humedad = datos.main.humidity;
+        resultadoDiv.innerHTML = `
+        <p>La temperatura en ${datos.name} es de ${temperatura}°C.</p>
+        <p>La humedad es de: ${humedad}</p>
+        `;
     } catch (error) {
         console.error("Error:", error);
         resultadoDiv.innerText = 'Error al comunicarse con el servidor local.';
