@@ -47,6 +47,17 @@ jobs:
             echo "Si tienes una razón válida, el profesor lo revisará manualmente"
             # Esto es advertencia, no bloquea (coméntalo si quieres que bloquee)
           fi
+
+      # ============================================
+      # 3.5 ASIGNAR REVISOR AUTOMÁTICO (NUEVO)
+      # ============================================
+      - name: 👨‍🏫 Asignar revisor automático
+        if: success() 
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }} \
+            --add-assignee ajgutierr3z
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       # ============================================
       # 4. VERIFICAR QUE NO BORRARON ARCHIVOS
