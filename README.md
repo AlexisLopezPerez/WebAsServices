@@ -8,6 +8,8 @@
 [![GitHub stars](https://img.shields.io/github/stars/ajgutierr3z/WebAsServices)](https://github.com/ajgutierr3z/WebAsServices/stargazers)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+
+
 </div>
 
 
@@ -116,7 +118,7 @@ Cuando un alumno crea un Pull Request, el CI:
 |---------|-------|
 | Total de PRs | ![GitHub pull requests](https://img.shields.io/github/issues-pr/ajgutierr3z/WebAsServices) |
 | Entregas validadas | ✅ [Ver Actions](https://github.com/ajgutierr3z/WebAsServices/actions) |
-| Alumnos activos | [Contar desde forks] |
+| Alumnos activos | [Contar desde forks](https://img.shields.io/github/forks/ajgutierr3z/WebAsServices?label=&color=informational) |
 | Cobertura de prácticas | Práctica 1, 2, 3 |
 
 ### 🏷️ Estado de las entregas
@@ -131,7 +133,7 @@ Usamos labels para clasificar los PRs:
 ### 📊 Dashboard visual
 
 Puedes ver el tablero de proyectos aquí:  
-[![Project Status](https://img.shields.io/badge/Project-Kanban-blue)](https://github.com/users/ajgutierr3z/projects/1)
+[![Project Status](https://img.shields.io/badge/Project-Kanban-blue)](https://github.com/users/ajgutierr3z/projects/2)
 
 ---
 
