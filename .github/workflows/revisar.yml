@@ -237,43 +237,43 @@ jobs:
       # ============================================
       # 10. COMENTARIO FINAL
       # ============================================
-      - name: 💬 Comentario de éxito en PR
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const lenguajes = [];
-            const archivos = '${{ join(github.event.pull_request.files.*.filename, ', ') }}';
-            
-            if (archivos.includes('.php')) lenguajes.push('PHP');
-            if (archivos.includes('.py')) lenguajes.push('Python');
-            if (archivos.includes('.js')) lenguajes.push('JavaScript');
-            if (archivos.includes('.html')) lenguajes.push('HTML');
-            if (archivos.includes('.css')) lenguajes.push('CSS');
-            
-            const mensaje = `## ✅ Validación completada
-                        
-            ### 📊 Resultados:
-            - **demo_soa/**: ✅ No modificado
-            - **Archivos borrados**: ✅ Ninguno
-            - **Extensiones**: ✅ Válidas
-            - **Sintaxis**: ✅ Correcta (${lenguajes.join(', ') || 'N/A'})
-            - **Tamaño**: ✅ Dentro de límites
-            - **Formato nombre**: ✅ Válido
-                        
-            ### 📝 Lenguajes detectados en esta entrega:
-            ${lenguajes.map(l => `- ${l}`).join('\n') || '- No se detectaron archivos de código'}
-                        
-            ### 🎯 Próximos pasos:
-            1. El profesor revisará manualmente tu código
-            2. Recibirás feedback en este PR
-            3. El PR será cerrado (sin merge) una vez revisado
-                        
-            ¡Gracias por tu entrega! 🎓
-            `;
-            
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: mensaje
-            });
+      # - name: 💬 Comentario de éxito en PR
+      #  uses: actions/github-script@v7
+      #  with:
+      #    script: |
+      #      const lenguajes = [];
+      #      const archivos = '${{ join(github.event.pull_request.files.*.filename, ', ') }}';
+      #      
+      #      if (archivos.includes('.php')) lenguajes.push('PHP');
+      #      if (archivos.includes('.py')) lenguajes.push('Python');
+      #      if (archivos.includes('.js')) lenguajes.push('JavaScript');
+      #      if (archivos.includes('.html')) lenguajes.push('HTML');
+      #      if (archivos.includes('.css')) lenguajes.push('CSS');
+      #      
+      #      const mensaje = `## ✅ Validación completada
+      #                 
+      #      ### 📊 Resultados:
+      #      - **demo_soa/**: ✅ No modificado
+      #      - **Archivos borrados**: ✅ Ninguno
+      #      - **Extensiones**: ✅ Válidas
+      #      - **Sintaxis**: ✅ Correcta (${lenguajes.join(', ') || 'N/A'})
+      #      - **Tamaño**: ✅ Dentro de límites
+      #      - **Formato nombre**: ✅ Válido
+      #                  
+      #      ### 📝 Lenguajes detectados en esta entrega:
+      #      ${lenguajes.map(l => `- ${l}`).join('\n') || '- No se detectaron archivos de código'}
+      #                  
+      #      ### 🎯 Próximos pasos:
+      #      1. El profesor revisará manualmente tu código
+      #      2. Recibirás feedback en este PR
+      #      3. El PR será cerrado (sin merge) una vez revisado
+      #                  
+      #      ¡Gracias por tu entrega! 🎓
+      #      `;
+      #      
+      #      github.rest.issues.createComment({
+      #        issue_number: context.issue.number,
+      #        owner: context.repo.owner,
+      #        repo: context.repo.repo,
+      #        body: mensaje
+      #      });
