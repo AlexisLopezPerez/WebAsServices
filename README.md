@@ -107,7 +107,7 @@ Cuando un alumno crea un Pull Request, el CI:
 3. **Agrega labels** como `auto-validado`
 4. **No cierra el PR** (el profesor lo hace manualmente)
 
-![Estado del CI](https://github.com/ajgutierr3z/WebAsServices/actions/workflows/revisar-entregas.yml/badge.svg)
+![Estado del CI](https://github.com/ajgutierr3z/WebAsServices/actions/workflows/revisar.yml/badge.svg)
 
 ---
 ## 📊 Estadísticas de Entregas
