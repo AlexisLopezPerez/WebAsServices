@@ -4,12 +4,12 @@
 
 // 1. Simulamos el archivo .env o la configuración segura
 
-$endpoint = "coloca-tu-endpoint";
-$apiKey   = "coloca-tu-api-key";
+$endpoint = ".";
+$apiKey   = ".";
 
 // 2. Definimos la query de GraphQL que queremos hacer
 $graphQLQuery = [
-    "query" => "query MiConsultaDeClase { directorio { nombre categoria telefono imagen } }"
+    "query" => "query MiConsultaDeClase { hoja1 { nombre categoria telefono imagen } }"
 ];
 
 
