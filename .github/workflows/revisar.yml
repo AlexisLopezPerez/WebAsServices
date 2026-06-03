@@ -1,0 +1,279 @@
+name: Revisar Entregas Multi-Lenguaje
+
+on: [pull_request]
+
+jobs:
+  revisar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      # ============================================
+      # 1. REGLA GENERAL: Bloquear demo_soa/
+      # ============================================
+      - name: 🚫 Bloquear demo_soa/
+        run: |
+          ARCHIVOS_MODIFICADOS=$(git diff --name-only origin/main | grep "^demo_soa/" || true)
+          if [ -n "$ARCHIVOS_MODIFICADOS" ]; then
+            echo "❌ PR RECHAZADO: No puedes modificar demo_soa/"
+            echo "$ARCHIVOS_MODIFICADOS"
+            exit 1
+          fi
+      # ============================================
+      # 2. BLOQUEAR .github/ (configuración del CI)
+      # ¡EL CI SE PROTEGE A SÍ MISMO!
+      # ============================================
+      - name: 🔒 Bloquear .github/ (configuración del repositorio)
+        run: |
+          ARCHIVOS_CONFIG=$(git diff --name-only origin/main | grep "^\.github/" || true)
+          if [ -n "$ARCHIVOS_CONFIG" ]; then
+            echo "❌ PR RECHAZADO: No puedes modificar la configuración del repositorio (.github/)"
+            echo "$ARCHIVOS_CONFIG"
+            echo ""
+            echo "Esta carpeta contiene los workflows de automatización."
+            echo "No debe ser modificada por los alumnos."
+            exit 1
+          fi
+
+      # ============================================
+      # 3. Bloquear README.md
+      # ============================================
+      - name: 📚 Bloquear README.md
+        run: |
+          if git diff --name-only origin/main | grep -q "^README.md$"; then
+            echo "⚠️ ADVERTENCIA: Estás modificando el README.md principal"
+            echo "Si tienes una razón válida, el profesor lo revisará manualmente"
+            # Esto es advertencia, no bloquea (coméntalo si quieres que bloquee)
+          fi
+
+      # ============================================
+      # 3.5 ASIGNAR REVISOR AUTOMÁTICO (NUEVO)
+      # ============================================
+      #- name: 👨‍🏫 Asignar revisor automático
+      #  if: success() 
+      #  run: |
+      #    gh pr edit ${{ github.event.pull_request.number }} \
+      #      --add-assignee ajgutierr3z
+      #  env:
+      #    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      # ============================================
+      # 4. VERIFICAR QUE NO BORRARON ARCHIVOS
+      # ============================================
+      - name: 📄 Verificar archivos borrados
+        run: |
+          ARCHIVOS_BORRADOS=$(git diff --diff-filter=D --name-only origin/main)
+          if [ -n "$ARCHIVOS_BORRADOS" ]; then
+            echo "❌ No puedes borrar archivos existentes:"
+            echo "$ARCHIVOS_BORRADOS"
+            exit 1
+          fi
+      
+      # ============================================
+      # 5. VALIDAR EXTENSIONES PERMITIDAS
+      # ============================================
+      - name: 📝 Validar extensiones de archivo
+        run: |
+          EXTENSIONES_PERMITIDAS="php py js html htm css scss less json xml txt md"
+          ARCHIVOS_NUEVOS=$(git diff --diff-filter=A --name-only origin/main)
+          
+          for archivo in $ARCHIVOS_NUEVOS; do
+            EXTENSION="${archivo##*.}"
+            if ! echo "$EXTENSIONES_PERMITIDAS" | grep -q "$EXTENSION"; then
+              echo "❌ Extensión '.$EXTENSION' no permitida en: $archivo"
+              echo "📚 Extensiones permitidas: $EXTENSIONES_PERMITIDAS"
+              exit 1
+            fi
+          done
+          echo "✅ Extensiones válidas"
+      
+      # ============================================
+      # 6. VALIDAR SINTAXIS POR LENGUAJE
+      # ============================================
+      - name: 🔧 Validar sintaxis PHP
+        run: |
+          ARCHIVOS_PHP=$(git diff --diff-filter=A --name-only origin/main | grep "\.php$" || true)
+          if [ -n "$ARCHIVOS_PHP" ]; then
+            sudo apt-get install -y php-cli
+            for archivo in $ARCHIVOS_PHP; do
+              if php -l "$archivo"; then
+                echo "✅ PHP: $archivo"
+              else
+                echo "❌ PHP: Error de sintaxis en $archivo"
+                exit 1
+              fi
+            done
+          fi
+      
+      - name: 🐍 Validar sintaxis Python
+        run: |
+          ARCHIVOS_PY=$(git diff --diff-filter=A --name-only origin/main | grep "\.py$" || true)
+          if [ -n "$ARCHIVOS_PY" ]; then
+            sudo apt-get install -y python3
+            for archivo in $ARCHIVOS_PY; do
+              if python3 -m py_compile "$archivo"; then
+                echo "✅ Python: $archivo"
+              else
+                echo "❌ Python: Error de sintaxis en $archivo"
+                exit 1
+              fi
+            done
+          fi
+      
+      - name: 📜 Validar sintaxis JavaScript
+        run: |
+          ARCHIVOS_JS=$(git diff --diff-filter=A --name-only origin/main | grep "\.js$" || true)
+          if [ -n "$ARCHIVOS_JS" ]; then
+            sudo apt-get update
+            sudo apt-get install -y nodejs npm
+            sudo npm install -g jshint
+            for archivo in $ARCHIVOS_JS; do
+              if jshint "$archivo"; then
+                echo "✅ JavaScript: $archivo"
+              else
+                echo "❌ JavaScript: Error de sintaxis en $archivo"
+                exit 1
+              fi
+            done
+          fi
+      
+      - name: 🎨 Validar HTML/CSS (estructura básica)
+        run: |
+          ARCHIVOS_HTML=$(git diff --diff-filter=A --name-only origin/main | grep "\.html\?$" || true)
+          ARCHIVOS_CSS=$(git diff --diff-filter=A --name-only origin/main | grep "\.css$" || true)
+          
+          # Validar HTML
+          for archivo in $ARCHIVOS_HTML; do
+            if grep -q "<html" "$archivo"; then
+              echo "✅ HTML: $archivo (tiene etiqueta html)"
+            else
+              echo "⚠️ HTML: $archivo no tiene etiqueta <html>"
+            fi
+            
+            if grep -q "<!DOCTYPE" "$archivo"; then
+              echo "✅ HTML: $archivo tiene DOCTYPE"
+            else
+              echo "⚠️ HTML: $archivo no tiene DOCTYPE"
+            fi
+          done
+          
+          # Validar CSS básico
+          for archivo in $ARCHIVOS_CSS; do
+            if grep -q "{" "$archivo"; then
+              echo "✅ CSS: $archivo (tiene reglas CSS)"
+            else
+              echo "⚠️ CSS: $archivo parece vacío o sin reglas"
+            fi
+          done
+      
+      # ============================================
+      # 7. VALIDAR TAMAÑO MÁXIMO (diferenciado)
+      # ============================================
+      - name: 📏 Validar tamaño por tipo de archivo
+        run: |
+          ARCHIVOS_NUEVOS=$(git diff --diff-filter=A --name-only origin/main)
+          
+          for archivo in $ARCHIVOS_NUEVOS; do
+            EXTENSION="${archivo##*.}"
+            TAMANO=$(stat -c%s "$archivo" 2>/dev/null || stat -f%z "$archivo" 2>/dev/null)
+            
+            # Establecer límites según el tipo
+            case $EXTENSION in
+              php|py|js) LIMITE=51200 ;;    # 50KB para código
+              html|css)  LIMITE=102400 ;;   # 100KB para HTML/CSS
+              json|xml)  LIMITE=51200 ;;    # 50KB para datos
+              txt|md)    LIMITE=204800 ;;   # 200KB para texto
+              *)         LIMITE=102400 ;;   # 100KB por defecto
+            esac
+            
+            if [ $TAMANO -gt $LIMITE ]; then
+              TAMANO_KB=$((TAMANO / 1024))
+              LIMITE_KB=$((LIMITE / 1024))
+              echo "❌ $archivo: ${TAMANO_KB}KB excede el límite de ${LIMITE_KB}KB"
+              exit 1
+            fi
+          done
+          echo "✅ Todos los archivos respetan límites de tamaño"
+      
+      # ============================================
+      # 8. VALIDAR NOMBRES DE ARCHIVO (sin acentos)
+      # ============================================
+      - name: 🔤 Validar nombres de archivo
+        run: |
+          ARCHIVOS_NUEVOS=$(git diff --diff-filter=A --name-only origin/main)
+          
+          for archivo in $ARCHIVOS_NUEVOS; do
+            # Verificar acentos, espacios y caracteres especiales
+            if echo "$archivo" | grep -q "[áéíóúñÑüÁÉÍÓÚÜ\s]"; then
+              echo "❌ Nombre inválido: '$archivo'"
+              echo "Usa solo: letras (a-z), números (0-9), guiones (-), guiones bajos (_)"
+              exit 1
+            fi
+            
+            # Verificar que use minúsculas (recomendación)
+            if echo "$archivo" | grep -q "[A-Z]"; then
+              echo "⚠️ RECOMENDACIÓN: $archivo usa mayúsculas (mejor usar minúsculas)"
+              # Esto es advertencia, no error
+            fi
+          done
+      
+      # ============================================
+      # 9. VALIDAR QUE EL ARCHIVO NO ESTÉ VACÍO
+      # ============================================
+      - name: 📄 Verificar archivos no vacíos
+        run: |
+          ARCHIVOS_NUEVOS=$(git diff --diff-filter=A --name-only origin/main)
+          
+          for archivo in $ARCHIVOS_NUEVOS; do
+            if [ ! -s "$archivo" ]; then
+              echo "❌ $archivo está vacío"
+              exit 1
+            fi
+          done
+          echo "✅ No hay archivos vacíos"
+      
+      # ============================================
+      # 10. COMENTARIO FINAL
+      # ============================================
+      # - name: 💬 Comentario de éxito en PR
+      #  uses: actions/github-script@v7
+      #  with:
+      #    script: |
+      #      const lenguajes = [];
+      #      const archivos = '${{ join(github.event.pull_request.files.*.filename, ', ') }}';
+      #      
+      #      if (archivos.includes('.php')) lenguajes.push('PHP');
+      #      if (archivos.includes('.py')) lenguajes.push('Python');
+      #      if (archivos.includes('.js')) lenguajes.push('JavaScript');
+      #      if (archivos.includes('.html')) lenguajes.push('HTML');
+      #      if (archivos.includes('.css')) lenguajes.push('CSS');
+      #      
+      #      const mensaje = `## ✅ Validación completada
+      #                 
+      #      ### 📊 Resultados:
+      #      - **demo_soa/**: ✅ No modificado
+      #      - **Archivos borrados**: ✅ Ninguno
+      #      - **Extensiones**: ✅ Válidas
+      #      - **Sintaxis**: ✅ Correcta (${lenguajes.join(', ') || 'N/A'})
+      #      - **Tamaño**: ✅ Dentro de límites
+      #      - **Formato nombre**: ✅ Válido
+      #                  
+      #      ### 📝 Lenguajes detectados en esta entrega:
+      #      ${lenguajes.map(l => `- ${l}`).join('\n') || '- No se detectaron archivos de código'}
+      #                  
+      #      ### 🎯 Próximos pasos:
+      #      1. El profesor revisará manualmente tu código
+      #      2. Recibirás feedback en este PR
+      #      3. El PR será cerrado (sin merge) una vez revisado
+      #                  
+      #      ¡Gracias por tu entrega! 🎓
+      #      `;
+      #      
+      #      github.rest.issues.createComment({
+      #        issue_number: context.issue.number,
+      #        owner: context.repo.owner,
+      #        repo: context.repo.repo,
+      #        body: mensaje
+      #      });

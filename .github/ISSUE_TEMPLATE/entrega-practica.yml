@@ -1,0 +1,29 @@
+name: 📝 Entrega de Práctica
+description: Template para que los alumnos entreguen prácticas
+title: "[PRÁCTICA] - "
+labels: ["entrega", "pending-review"]
+body:
+  - type: input
+    id: nombre
+    attributes:
+      label: Nombre completo
+      placeholder: "Ej: Juan Pérez"
+    validations:
+      required: true
+  
+  - type: dropdown
+    id: practica
+    attributes:
+      label: Práctica
+      options:
+        - Práctica 1 - API REST
+        - Práctica 2 - GraphQL
+        - Práctica 3 - Microservicios
+    validations:
+      required: true
+  
+  - type: textarea
+    id: duda
+    attributes:
+      label: ¿Tienes alguna duda específica?
+      placeholder: "Ej: No me queda claro cómo usar fetch en JavaScript..."

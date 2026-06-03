@@ -1,0 +1,36 @@
+# .github/workflows/stats.yml
+name: Generate Stats
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Cada domingo a las 00:00
+  workflow_dispatch:      # Permite ejecutar manualmente
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Generar estadísticas
+        run: |
+          echo "# 📊 Estadísticas del Repositorio" > STATS.md
+          echo "" >> STATS.md
+          echo "## 📈 Métricas actuales" >> STATS.md
+          echo "" >> STATS.md
+          echo "| Métrica | Valor |" >> STATS.md
+          echo "|---------|-------|" >> STATS.md
+          echo "| Total de PRs | $(gh pr list --state all --limit 1000 2>/dev/null | wc -l) |" >> STATS.md
+          echo "| PRs abiertos | $(gh pr list --state open --limit 1000 2>/dev/null | wc -l) |" >> STATS.md
+          echo "| PRs cerrados | $(gh pr list --state closed --limit 1000 2>/dev/null | wc -l) |" >> STATS.md
+          echo "| Última actualización | $(date '+%Y-%m-%d %H:%M:%S') |" >> STATS.md
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Commit y push de estadísticas
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add STATS.md
+          git commit -m "📊 Auto-actualizar estadísticas [skip ci]" || echo "Sin cambios para commit"
+          git push

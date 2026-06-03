@@ -1,0 +1,59 @@
+# .github/labeler.yml
+# Este archivo asigna labels automáticamente según los archivos modificados
+
+# Label para PRs que modifican APIRest/
+APIRest:
+  - changed-files:
+      - any-glob-to-any-file: 'APIRest/**/*'
+
+# Label para PRs que modifican GraphQL/
+GraphQL:
+  - changed-files:
+      - any-glob-to-any-file: 'GraphQL/**/*'
+
+# Label para PRs que modifican APIs/
+APIs:
+  - changed-files:
+      - any-glob-to-any-file: 'APIs/**/*'
+
+# Label para PRs que modifican demo_soa/ (aunque debería estar bloqueado)
+demo_soa:
+  - changed-files:
+      - any-glob-to-any-file: 'demo_soa/**/*'
+
+# Label para PRs que modifican documentación
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: 
+        - 'README.md'
+        - '**.md'
+        - 'docs/**/*'
+
+# Label para PRs que contienen código PHP
+PHP:
+  - changed-files:
+      - any-glob-to-any-file: '**.php'
+
+# Label para PRs que contienen código Python
+Python:
+  - changed-files:
+      - any-glob-to-any-file: '**.py'
+
+# Label para PRs que contienen código JavaScript
+JavaScript:
+  - changed-files:
+      - any-glob-to-any-file: '**.js'
+
+# Label para PRs que contienen HTML/CSS
+frontend:
+  - changed-files:
+      - any-glob-to-any-file: 
+        - '**.html'
+        - '**.css'
+
+# Label para PRs grandes (más de 10 archivos)
+large-pr:
+  - changed-files:
+      - any-glob-to-any-file: '*'
+    all-globs-to-all-files: true
+    files:  # Opcional: contar archivos

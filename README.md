@@ -1,10 +1,32 @@
+<div align="center">
+
 # WebAsServices
+
+[![GitHub last commit](https://img.shields.io/github/last-commit/ajgutierr3z/WebAsServices)](https://github.com/ajgutierr3z/WebAsServices/commits/main)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/ajgutierr3z/WebAsServices)](https://github.com/ajgutierr3z/WebAsServices/pulls)
+[![CI Status](https://github.com/ajgutierr3z/WebAsServices/actions/workflows/revisar.yml/badge.svg)](https://github.com/ajgutierr3z/WebAsServices/actions)
+[![GitHub stars](https://img.shields.io/github/stars/ajgutierr3z/WebAsServices)](https://github.com/ajgutierr3z/WebAsServices/stargazers)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
+
+</div>
+
 
 Repositorio oficial de la materia **Aplicaciones Web Orientada a Servicios**. Aquí encontrarás todos los códigos de ejemplo que usaremos en clase y la base para que realices tus prácticas.
 
-[www.frexus.dev](https://www.frexus.dev)
 
 ---
+
+## 📑 Tabla de Contenidos
+
+- [📚 Estructura del Repositorio](#-estructura-del-repositorio)
+- [🚀 Flujo de Trabajo para Alumnos (¿cómo entregar tu práctica?)](#-flujo-de-trabajo-para-alumnos-c%C3%B3mo-entregar-tu-pr%C3%A1ctica)
+- [🤖 Automatización CI/CD](#-automatización-cicd)
+- [📊 Estadísticas de Entregas](#-estadísticas-de-entregas)
+- [📖 Licencia y Contacto](#licencia-y-contacto)
+---
+
 
 ## 📚 Estructura del Repositorio
 
@@ -38,7 +60,9 @@ Ejemplo para la primera práctica: crea un archivo dentro de APIRest/ con tu nom
 ```php
 # Si usas PHP
 echo "<?php echo 'Hola desde [Tu Nombre]'; ?>" > APIRest/tu_nombre.php
-
+```
+o python
+```python
 # Si usas Python
 echo "print('Hola desde [Tu Nombre]')" > APIRest/tu_nombre.py
 ```
@@ -52,13 +76,64 @@ git push origin main
 - Ve a tu fork en GitHub.
 - Haz clic en "Compare & pull request" (botón amarillo).
 - Verifica que diga:
-´´´bash
+```bash
 base repository: ajgutierr3z/WebAsServices ←
 head repository: TU_USUARIO/WebAsServices
-´´´
+```
 - Escribe un título (ej. "Entrega de [Tu Nombre]") y haz clic en "Create pull request".
 - ✅ Listo. Tu entrega queda registrada. No es necesario que yo haga merge.
-> 📖 Para más detalles, consulta la guía completa en el blog de Frexus (actualizar enlace).
+> 📖 Para más detalles, consulta la guía completa en el [blog de Frexus](https://www.frexus.dev/post/github-y-pull-requests/).
+
+---
+## 🤖 Automatización CI/CD
+
+Este repositorio utiliza **GitHub Actions** para automatizar la revisión de entregas.
+
+### ¿Qué valida automáticamente?
+
+| Validación | Estado | Descripción |
+|------------|--------|-------------|
+| Protección `demo_soa/` | ✅ Activo | Bloquea modificaciones a ejemplos del profesor |
+| Protección `.github/` | ✅ Activo | Protege la configuración del CI |
+| Sintaxis PHP/Python/JS | ✅ Activo | Verifica que el código sea válido |
+| Tamaño de archivos | ✅ Activo | Limita archivos a 100KB |
+| Extensiones permitidas | ✅ Activo | Solo .php, .py, .js, .html, .css |
+
+### 📊 Resultados en cada PR
+
+Cuando un alumno crea un Pull Request, el CI:
+1. **Revisa automáticamente** la estructura
+2. **Deja un comentario** con los resultados
+3. **Agrega labels** como `auto-validado`
+4. **No cierra el PR** (el profesor lo hace manualmente)
+
+![Estado del CI](https://github.com/ajgutierr3z/WebAsServices/actions/workflows/revisar.yml/badge.svg)
+
+---
+## 📊 Estadísticas de Entregas
+
+### 📈 Métricas del repositorio
+
+| Métrica | Valor |
+|---------|-------|
+| Total de PRs | ![GitHub pull requests](https://img.shields.io/github/issues-pr/ajgutierr3z/WebAsServices) |
+| Entregas validadas |  ![PRs Cerrados](https://img.shields.io/github/issues-pr-closed/ajgutierr3z/WebAsServices?label=&color=success) |
+| Alumnos activos | ![GitHub forks](https://img.shields.io/github/forks/ajgutierr3z/WebAsServices?label=&color=informational) |
+| Cobertura de prácticas | Todas|
+
+### 🏷️ Estado de las entregas
+
+Usamos labels para clasificar los PRs:
+
+- 🟢 `entrega-completa` - Entregas que cumplen todos los requisitos
+- 🟡 `needs-feedback` - Esperando revisión del profesor
+- 🔵 `feedback-dado` - Ya se proporcionó retroalimentación
+- 🟣 `ejemplo-destacado` - Casos destacados
+
+### 📊 Dashboard visual
+
+Puedes ver el tablero de proyectos aquí:  
+[![Project Status](https://img.shields.io/badge/Project-Kanban-blue)](https://github.com/users/ajgutierr3z/projects/2)
 
 ---
 
@@ -75,8 +150,8 @@ head repository: TU_USUARIO/WebAsServices
 - Todo queda trazable para tu portafolio.
 
 ### Licencia y contacto
-- Profesor: ajgutierr3z
-- Blog: frexus.dev
+- Profesor: Alfredo de Jesús Gutiérrez Gómez
+- Blog: [frexus.dev](www.frexus.dev)
 - Propósito: Exclusivamente educativo.
 - Licencia: MIT (puedes usar el código, pero cita la fuente).
 

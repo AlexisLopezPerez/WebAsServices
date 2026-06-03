@@ -1,0 +1,15 @@
+name: Welcome first-timers
+on: [pull_request]
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-message: |
+            🎉 ¡Bienvenido/a a WebAsServices!
+            
+            Gracias por tu primera entrega. El CI ya está revisando tu código.
+            Recibirás feedback pronto. 📚
