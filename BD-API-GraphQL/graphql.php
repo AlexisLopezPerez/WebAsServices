@@ -16,39 +16,65 @@ $tareaType = new ObjectType([
     'fields' => [
         'id' => Type::int(),
         'titulo' => Type::string(),
-        'completada' => Type::boolean()
+        'completada' => Type::boolean(),
+        'eliminado_rest' => Type::int(),
+        'eliminado_gql' => Type::int()
     ]
 ]);
 
-// 2. Definir Query (Lectura)
+// 2. Definir Query (Lectura) - Filtra para no mostrar los eliminados en GraphQL
 $queryType = new ObjectType([
     'name' => 'Query',
     'fields' => [
         'tareas' => [
             'type' => Type::listOf($tareaType),
-            // El RESOLVER: código SQL puro
             'resolve' => function () use ($pdo) {
-                $stmt = $pdo->query("SELECT * FROM tareas");
+                $stmt = $pdo->query("SELECT * FROM tareas WHERE eliminado_gql = 0");
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
         ]
     ]
 ]);
 
-// 3. Definir Mutation (Creación)
+// 3. Definir Mutation (Creación, Actualización, Eliminación)
 $mutationType = new ObjectType([
     'name' => 'Mutation',
     'fields' => [
+        // Mutación para crear
         'crearTarea' => [
             'type' => Type::string(),
             'args' => [
                 'titulo' => Type::nonNull(Type::string())
             ],
-            // El RESOLVER para crear
             'resolve' => function ($root, $args) use ($pdo) {
                 $stmt = $pdo->prepare("INSERT INTO tareas (titulo) VALUES (:titulo)");
                 $stmt->execute(['titulo' => $args['titulo']]);
                 return "Tarea creada exitosamente vía GraphQL";
+            }
+        ],
+        // Mutación para actualizar
+        'actualizarTarea' => [
+            'type' => Type::string(),
+            'args' => [
+                'id' => Type::nonNull(Type::int()),
+                'titulo' => Type::nonNull(Type::string())
+            ],
+            'resolve' => function ($root, $args) use ($pdo) {
+                $stmt = $pdo->prepare("UPDATE tareas SET titulo = :titulo WHERE id = :id");
+                $stmt->execute(['titulo' => $args['titulo'], 'id' => $args['id']]);
+                return "Tarea actualizada vía GraphQL";
+            }
+        ],
+        // Mutación para eliminar - Eliminación lógica para GraphQL
+        'eliminarTarea' => [
+            'type' => Type::string(),
+            'args' => [
+                'id' => Type::nonNull(Type::int())
+            ],
+            'resolve' => function ($root, $args) use ($pdo) {
+                $stmt = $pdo->prepare("UPDATE tareas SET eliminado_gql = 1 WHERE id = :id");
+                $stmt->execute(['id' => $args['id']]);
+                return "Tarea eliminada lógicamente para GraphQL";
             }
         ]
     ]

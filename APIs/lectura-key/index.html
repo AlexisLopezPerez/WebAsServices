@@ -2,13 +2,187 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clima API (Proxy)</title>
+    <style>
+        :root {
+            /* Paleta de colores Dark Premium con acentos cian/neón */
+            --bg-dark: #0d0e12;
+            --card-bg: #161920;
+            --border-color: #242936;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --accent-glow: #00f0ff;
+            --accent-hover: #00b8cc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            /* Sutil degradado de fondo para dar profundidad */
+            background-image: radial-gradient(circle at 50% 50%, #1a1f2c 0%, #0d0e12 100%);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-primary);
+        }
+
+        .container {
+            background: var(--card-bg);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--text-primary);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 1.5rem;
+        }
+
+        input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: #090a0d;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+        }
+
+        input::placeholder {
+            color: #4b5563;
+        }
+
+        button {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            background: var(--accent-glow);
+            color: #050507;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            background: var(--accent-hover);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        #resultado {
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        /* Tarjeta de Clima animada */
+        .weather-card {
+            margin-top: 1.5rem;
+            animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .weather-card h2 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .weather-icon {
+            width: 100px;
+            height: 100px;
+            filter: drop-shadow(0px 0px 12px rgba(0, 240, 255, 0.15));
+        }
+
+        .temp {
+            font-size: 3.8rem;
+            font-weight: 800;
+            margin: 0.2rem 0;
+            color: var(--text-primary);
+            letter-spacing: -1px;
+        }
+
+        .desc {
+            text-transform: capitalize;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 1.8rem;
+            color: var(--text-secondary);
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            background: #090a0d;
+            padding: 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            font-size: 0.95rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 6px 0;
+        }
+
+        .detail-item span:first-child {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .detail-item span:last-child {
+            color: var(--accent-glow);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
 </head>
 <body>
-    <h1>Consulta el Clima</h1>
-    <input type="text" id="ciudad" placeholder="Ej. Madrid, Tokyo, Cancun">
-    <button id="btnBuscar">Buscar</button>
-    <div id="resultado" style="margin-top: 20px; font-weight: bold;"></div>
+
+    <div class="container">
+        <h1>Consulta el Clima</h1>
+        <div class="search-box">
+            <input type="text" id="ciudad" placeholder="Ej. Madrid, Tokyo, Cancun">
+            <button id="btnBuscar">Buscar</button>
+        </div>
+        <div id="resultado"></div>
+    </div>
 
     <script src="app.js"></script>
 </body>
