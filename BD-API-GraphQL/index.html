@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CRUD: REST vs GraphQL</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 2rem auto; padding: 1rem; }
+        .card { border: 1px solid #ccc; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; }
+        input[type="text"] { width: 70%; padding: 0.5rem; }
+        button { padding: 0.5rem 1rem; cursor: pointer; }
+        .rest-btn { background-color: #4CAF50; color: white; border: none; }
+        .gql-btn { background-color: #E10098; color: white; border: none; }
+        ul { list-style: none; padding: 0; }
+        li { background: #f9f9f9; margin: 0.5rem 0; padding: 0.5rem; border-left: 4px solid #333; }
+    </style>
+</head>
+<body>
+
+    <h2>Gestor de Tareas</h2>
+    
+    <div class="card">
+        <input type="text" id="nuevaTarea" placeholder="Escribe una nueva tarea...">
+        <br><br>
+        <button class="rest-btn" onclick="crearTareaREST()">Crear con REST</button>
+        <button class="gql-btn" onclick="crearTareaGraphQL()">Crear con GraphQL</button>
+    </div>
+
+    <div class="card">
+        <button onclick="cargarTareasREST()">Cargar vía REST</button>
+        <button onclick="cargarTareasGraphQL()">Cargar vía GraphQL</button>
+        <ul id="listaTareas"></ul>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
