@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login con MyMLH</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0;
+        }
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .mlh-btn {
+            background-color: #ff3333; /* Color característico de MLH */
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .mlh-btn:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Bienvenido al Hackathon</h2>
+        <p>Inicia sesión para continuar</p>
+        <button class="mlh-btn" onclick="iniciarSesionMLH()">Iniciar sesión con MLH</button>
+    </div>
+
+    <script>
+        function iniciarSesionMLH() {
+            // Reemplaza esto con tu Client ID real de MyMLH
+            const clientId = 'TU_CLIENT_ID_AQUI'; 
+            
+            // Reemplaza esto con tu Redirect URI registrada en MyMLH
+            const redirectUri = encodeURIComponent('http://localhost/callback.php'); 
+            
+            // Construimos la URL de autorización
+            const mlhAuthUrl = `https://my.mlh.io/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
+            
+            // Redirigimos el navegador del usuario a MyMLH
+            window.location.href = mlhAuthUrl;
+        }
+    </script>
+
+</body>
+</html>
