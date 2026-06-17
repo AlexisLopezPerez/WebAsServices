@@ -1,0 +1,16 @@
+[
+    {
+        "id": "1",
+        "nombre": "Horchatería La Catedral",
+        "categoria": "Alimentos",
+        "zona": "Centro",
+        "telefono": "9933123456"
+    },
+    {
+        "id": "2",
+        "nombre": "Mariscos El Bayo",
+        "categoria": "Restaurante",
+        "zona": "Tabasco 2000",
+        "telefono": "9933556677"
+    }
+]
